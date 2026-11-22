@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * kwh_price (rupiah per kWh) for electric-car garages only.
  * Relationship: one Garage has many Rentals (1:N).
  *
- * @author  Sewa Garasi Team
+ * @author  Christopher
  *
  * @version 1.0
  */

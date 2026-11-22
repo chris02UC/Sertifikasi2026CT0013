@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * daily_price is a snapshot of the garage price when the rental was created.
  * Relationships: belongs to one Vehicle and one Garage; has many RentalExtensions (composition).
  *
- * @author  Sewa Garasi Team
+ * @author  Christopher
  *
  * @version 1.0
  */

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * amount_due = remaining amount to pay for the added days (always > 0).
  * Relationships: part of one Rental (composition); processed by one admin (User).
  *
- * @author  Sewa Garasi Team
+ * @author  Christopher
  *
  * @version 1.0
  */

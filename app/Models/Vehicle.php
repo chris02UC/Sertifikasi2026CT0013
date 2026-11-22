@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * plate_number is empty for bicycles; battery_kwh is only set for electric cars.
  * Relationships: belongs to one User; has many Rentals.
  *
- * @author  Sewa Garasi Team
+ * @author  Christopher
  *
  * @version 1.0
  */

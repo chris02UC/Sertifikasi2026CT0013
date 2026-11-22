@@ -17,7 +17,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  *
  * Relationships: one tenant has many Vehicles; one admin processes many RentalExtensions.
  *
- * @author  Sewa Garasi Team
+ * @author  Christopher
  *
  * @version 1.0
  */
