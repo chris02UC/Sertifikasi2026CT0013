@@ -14,6 +14,9 @@ return [
     'exists' => ':attribute yang dipilih tidak valid.',
     'image' => ':attribute harus berupa gambar.',
     'integer' => ':attribute harus berupa bilangan bulat.',
+    'lte' => [
+        'numeric' => ':attribute tidak boleh lebih dari kapasitas listrik.',
+    ],
     'max' => [
         'file' => ':attribute maksimal :max kilobyte.',
         'numeric' => ':attribute maksimal :max.',
@@ -42,6 +45,7 @@ return [
         'plate_number' => 'Nomor plat',
         'brand_model' => 'Merek dan tipe',
         'battery_kwh' => 'Kapasitas listrik',
+        'current_kwh' => 'Sisa listrik saat ini',
         'rental_type' => 'Tipe sewa',
         'days' => 'Jumlah hari',
         'start_date' => 'Tanggal mulai sewa',

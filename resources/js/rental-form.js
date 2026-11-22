@@ -1,6 +1,6 @@
 /**
  * "Sewa Garasi Baru" (new rental) form.
- * - Shows fields based on the vehicle type (plate, battery capacity).
+ * - Shows fields based on the vehicle type (plate, battery capacity and charge left).
  * - Limits the garage-type options to those allowed for the vehicle.
  * - Calculates the end date and the daily-rental day limit.
  * - Calls the server quote endpoint for available garages + cost breakdown.
@@ -15,18 +15,20 @@ if (form) {
     const toDate = (s) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
     const daysInMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
-    const fields = ['vehicle_type', 'plate_number', 'brand_model', 'battery_kwh', 'rental_type', 'days', 'start_date', 'garage_type'];
+    const fields = ['vehicle_type', 'plate_number', 'brand_model', 'battery_kwh', 'current_kwh', 'rental_type', 'days', 'start_date', 'garage_type'];
 
-    function setVisible(el, visible) {
-        el.classList.toggle('hidden', !visible);
-        el.querySelectorAll('input, select').forEach((input) => { input.disabled = !visible; });
+    function setVisible(selector, visible) {
+        document.querySelectorAll(selector).forEach((el) => {
+            el.classList.toggle('hidden', !visible);
+            el.querySelectorAll('input, select').forEach((input) => { input.disabled = !visible; });
+        });
     }
 
     function refreshVehicleFields() {
         const type = $('vehicle_type').value;
         // Plate number for every vehicle except bicycles; battery capacity only for electric cars.
-        setVisible(document.querySelector('[data-show-for="plate"]'), type !== '' && type !== 'bicycle');
-        setVisible(document.querySelector('[data-show-for="battery"]'), type === 'electric_car');
+        setVisible('[data-show-for="plate"]', type !== '' && type !== 'bicycle');
+        setVisible('[data-show-for="battery"]', type === 'electric_car');
 
         const allowed = allowedGarages[type] ?? [];
         const garageSelect = $('garage_type');
@@ -38,7 +40,7 @@ if (form) {
 
     function refreshPeriod() {
         const daily = $('rental_type').value === 'daily';
-        setVisible(document.querySelector('[data-show-for="daily"]'), daily);
+        setVisible('[data-show-for="daily"]', daily);
         if (!$('start_date').value) return;
 
         const start = toDate($('start_date').value);

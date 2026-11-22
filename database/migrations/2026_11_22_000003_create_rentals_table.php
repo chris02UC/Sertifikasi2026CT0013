@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('duration_days');
             $table->unsignedInteger('daily_price');      // snapshot of the daily price at rental time
             $table->unsignedInteger('rent_cost');
+            $table->decimal('current_kwh', 8, 2)->nullable();    // battery charge left on arrival (electric cars only)
             $table->unsignedInteger('charging_cost')->default(0);
             $table->unsignedInteger('total_cost');
             $table->string('payment_proof_path');

@@ -39,6 +39,12 @@
                 <input class="input" id="battery_kwh" name="battery_kwh" type="number" step="0.01" min="1" value="{{ old('battery_kwh') }}">
                 @error('battery_kwh') <p class="error">{{ $message }}</p> @enderror
             </div>
+            <div data-show-for="battery">
+                <label class="label" for="current_kwh">Sisa listrik saat ini (kWh)</label>
+                <input class="input" id="current_kwh" name="current_kwh" type="number" step="0.01" min="0" value="{{ old('current_kwh', 0) }}">
+                <p class="mt-1 text-xs text-slate-500">0 = baterai kosong. Biaya isi listrik = (kapasitas − sisa) × harga per kWh.</p>
+                @error('current_kwh') <p class="error">{{ $message }}</p> @enderror
+            </div>
         </div>
     </section>
 
@@ -87,7 +93,7 @@
             </div>
         </div>
         <p class="text-sm text-slate-500">Sewa bulanan = 1 bulan (jumlah hari mengikuti bulan tanggal mulai), harga 25 × harga harian.
-            Mobil listrik di garasi mobil listrik wajib isi listrik penuh (kapasitas × harga per kWh).</p>
+            Mobil listrik di garasi mobil listrik wajib isi listrik sampai penuh ((kapasitas − sisa listrik) × harga per kWh).</p>
     </section>
 
     {{-- 3. Garage & cost --}}

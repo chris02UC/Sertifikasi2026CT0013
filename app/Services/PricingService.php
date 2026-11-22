@@ -40,18 +40,26 @@ class PricingService
     }
 
     /**
-     * Cost of charging to full: battery capacity (kWh) x price per kWh.
+     * Cost of charging the battery to full: (capacity - charge left) kWh x price per kWh.
      * Only applies to an electric car parked in an electric-car garage.
      *
-     * @return int charging cost (0 if not applicable)
+     * @param  float  $currentKwh  battery charge left when the car arrives (0 = empty, capacity = full)
+     * @return int charging cost (0 if not applicable or the battery is already full)
+     *
+     * @throws InvalidArgumentException if the charge left is below 0 or above the battery capacity
      */
-    public function chargingCost(Vehicle $vehicle, Garage $garage): int
+    public function chargingCost(Vehicle $vehicle, Garage $garage, float $currentKwh): int
     {
         if ($vehicle->type !== VehicleType::ELECTRIC_CAR || $garage->type !== GarageType::ELECTRIC) {
             return 0;
         }
 
-        return (int) round(($vehicle->battery_kwh ?? 0) * ($garage->kwh_price ?? 0));
+        $capacity = (float) $vehicle->battery_kwh;
+        if ($currentKwh < 0 || $currentKwh > $capacity) {
+            throw new InvalidArgumentException('Sisa listrik harus antara 0 dan kapasitas baterai.');
+        }
+
+        return (int) round(($capacity - $currentKwh) * ($garage->kwh_price ?? 0));
     }
 
     /**

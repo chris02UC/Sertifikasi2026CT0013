@@ -48,9 +48,9 @@ class RentalService
 
         // Available garages of the chosen type, each with its cost breakdown.
         $garages = $this->garageService->availableGarages($garageType, $start, $end)
-            ->map(function (Garage $garage) use ($type, $duration, $vehicle) {
+            ->map(function (Garage $garage) use ($type, $duration, $vehicle, $data) {
                 $rent = $this->pricing->rentCost($type, $garage->daily_price, $duration);
-                $charging = $this->pricing->chargingCost($vehicle, $garage);
+                $charging = $this->pricing->chargingCost($vehicle, $garage, $this->currentKwh($vehicle, $data));
 
                 return [
                     'id' => $garage->id,
@@ -94,7 +94,8 @@ class RentalService
             $vehicle->save();
 
             $rentCost = $this->pricing->rentCost($type, $garage->daily_price, $duration);
-            $chargingCost = $this->pricing->chargingCost($vehicle, $garage);
+            $currentKwh = $this->currentKwh($vehicle, $data);
+            $chargingCost = $this->pricing->chargingCost($vehicle, $garage, $currentKwh);
 
             $rental = Rental::create([
                 'vehicle_id' => $vehicle->id,
@@ -105,6 +106,7 @@ class RentalService
                 'duration_days' => $duration,
                 'daily_price' => $garage->daily_price,
                 'rent_cost' => $rentCost,
+                'current_kwh' => $vehicle->type->requiresBattery() ? $currentKwh : null,
                 'charging_cost' => $chargingCost,
                 'total_cost' => $this->pricing->newRentalTotal($rentCost, $chargingCost),
                 'payment_proof_path' => $proof->store('payment-proofs', 'public'),
@@ -219,6 +221,12 @@ class RentalService
             'brand_model' => $data['brand_model'],
             'battery_kwh' => $type->requiresBattery() ? (float) $data['battery_kwh'] : null,
         ]);
+    }
+
+    /** Battery charge left from the form (electric cars only; 0 for other vehicles). */
+    private function currentKwh(Vehicle $vehicle, array $data): float
+    {
+        return $vehicle->type->requiresBattery() ? (float) $data['current_kwh'] : 0.0;
     }
 
     private function assertVehicleFitsGarage(Vehicle $vehicle, GarageType $garageType): void

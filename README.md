@@ -8,7 +8,7 @@ Dibangun dengan Laravel (arsitektur MVC + service layer) dan basis data relasion
 **Penyewa**
 - Mendaftar (NIK, nama, telepon, email sebagai username, password). Akun menunggu verifikasi admin.
 - Sewa garasi baru:
-  - detail kendaraan (tipe, plat kecuali sepeda, merek/tipe, kapasitas listrik untuk mobil listrik);
+  - detail kendaraan (tipe, plat kecuali sepeda, merek/tipe, kapasitas listrik dan sisa listrik saat ini untuk mobil listrik);
   - sewa harian atau bulanan; tanggal mulai default hari ini, boleh tanggal mendatang (tidak boleh tanggal lewat);
   - tanggal selesai dihitung otomatis;
   - daftar garasi yang tersedia sesuai tipe kendaraan;
@@ -39,7 +39,7 @@ Dibangun dengan Laravel (arsitektur MVC + service layer) dan basis data relasion
 | Sewa bulanan | 1 bulan; jumlah hari = jumlah hari di bulan tanggal mulai (Feb 28/29, Apr 30, Mei 31). Harga = **25 × harga harian**. |
 | Sewa harian | 1 s/d (jumlah hari bulan mulai − 1) hari, dan tidak lebih dari 30 hari. |
 | Tanggal selesai | Dihitung inklusif: mulai + durasi − 1. |
-| Isi listrik | Mobil listrik di garasi mobil listrik wajib isi penuh: kapasitas (kWh) × harga per kWh. |
+| Isi listrik | Mobil listrik di garasi mobil listrik wajib isi sampai penuh: (kapasitas − sisa listrik saat ini) kWh × harga per kWh. Sisa listrik 0 sampai kapasitas. |
 | Total sewa baru | Biaya sewa + biaya isi listrik. |
 | Perpanjangan (admin) | Setiap bulan kalender penuh pada hari tambahan = 25 × harian, sisa hari = harian. Sisa biaya selalu lebih dari 0. |
 | Ketersediaan | Satu garasi hanya untuk satu kendaraan pada tanggal yang sama (cek tabrakan rentang tanggal). |
@@ -102,9 +102,9 @@ Pengaturan database ada di `.env`. Nilai default sudah sesuai XAMPP:
 php artisan test
 ```
 
-Unit test (white-box) ada di `tests/Unit` (47 test) dan menguji logika bisnis secara langsung, tanpa database:
+Unit test (white-box) ada di `tests/Unit` (50 test) dan menguji logika bisnis secara langsung, tanpa database:
 - `RentalPeriodServiceTest`: durasi sewa bulanan/harian dan tanggal selesai, termasuk nilai batas.
-- `PricingServiceTest`: biaya sewa, biaya isi listrik, total sewa baru, dan sisa biaya perpanjangan.
+- `PricingServiceTest`: biaya sewa, biaya isi listrik (kapasitas − sisa listrik), total sewa baru, dan sisa biaya perpanjangan.
 - `GarageCodeGeneratorTest`: kode garasi otomatis (S/C/E + 3 digit, maksimal 999).
 - `VehicleTypeTest`: aturan penempatan kendaraan ke tipe garasi.
 

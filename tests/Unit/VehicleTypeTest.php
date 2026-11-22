@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class VehicleTypeTest extends TestCase
 {
-    #[Test] // UT-38 to UT-45
+    #[Test] // UT-41 to UT-48
     #[DataProvider('placements')]
     public function can_use_follows_the_placement_rules(VehicleType $vehicle, GarageType $garage, bool $expected): void
     {
@@ -34,7 +34,7 @@ class VehicleTypeTest extends TestCase
         ];
     }
 
-    #[Test] // UT-46
+    #[Test] // UT-49
     public function requires_plate_for_every_vehicle_except_bicycle(): void
     {
         $this->assertFalse(VehicleType::BICYCLE->requiresPlate());
@@ -42,7 +42,7 @@ class VehicleTypeTest extends TestCase
         $this->assertTrue(VehicleType::ELECTRIC_CAR->requiresPlate());
     }
 
-    #[Test] // UT-47
+    #[Test] // UT-50
     public function requires_battery_only_for_electric_car(): void
     {
         $this->assertTrue(VehicleType::ELECTRIC_CAR->requiresBattery());

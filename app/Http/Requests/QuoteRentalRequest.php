@@ -23,6 +23,8 @@ class QuoteRentalRequest extends FormRequest
             'brand_model' => ['required', 'string', 'max:100'],
             // Battery capacity (kWh) only for electric cars.
             'battery_kwh' => ['required_if:vehicle_type,electric_car', 'nullable', 'numeric', 'min:1', 'max:10000'],
+            // Charge left when the car arrives: 0 (empty) up to the battery capacity (full).
+            'current_kwh' => ['required_if:vehicle_type,electric_car', 'nullable', 'numeric', 'min:0', 'lte:battery_kwh'],
             'rental_type' => ['required', Rule::enum(RentalType::class)],
             'days' => ['required_if:rental_type,daily', 'nullable', 'integer', 'min:1', 'max:30'],
             // Today by default; a future date is allowed, a past date is not.

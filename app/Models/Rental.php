@@ -23,7 +23,7 @@ class Rental extends Model
 {
     protected $fillable = [
         'vehicle_id', 'garage_id', 'rental_type', 'start_date', 'end_date', 'duration_days',
-        'daily_price', 'rent_cost', 'charging_cost', 'total_cost', 'payment_proof_path',
+        'daily_price', 'rent_cost', 'current_kwh', 'charging_cost', 'total_cost', 'payment_proof_path',
     ];
 
     protected function casts(): array
@@ -35,6 +35,7 @@ class Rental extends Model
             'duration_days' => 'integer',
             'daily_price' => 'integer',
             'rent_cost' => 'integer',
+            'current_kwh' => 'float',
             'charging_cost' => 'integer',
             'total_cost' => 'integer',
         ];

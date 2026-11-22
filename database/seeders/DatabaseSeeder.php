@@ -85,12 +85,13 @@ class DatabaseSeeder extends Seeder
     {
         $duration = $period->durationDays($type, $start, $days);
         $rentCost = $pricing->rentCost($type, $garage->daily_price, $duration);
-        $chargingCost = $pricing->chargingCost($vehicle, $garage);
+        $currentKwh = $vehicle->type->requiresBattery() ? 0.0 : null;   // demo electric cars arrive with an empty battery
+        $chargingCost = $pricing->chargingCost($vehicle, $garage, $currentKwh ?? 0.0);
 
         return Rental::create([
             'vehicle_id' => $vehicle->id, 'garage_id' => $garage->id, 'rental_type' => $type,
             'start_date' => $start, 'end_date' => $period->endDate($start, $duration), 'duration_days' => $duration,
-            'daily_price' => $garage->daily_price, 'rent_cost' => $rentCost, 'charging_cost' => $chargingCost,
+            'daily_price' => $garage->daily_price, 'rent_cost' => $rentCost, 'current_kwh' => $currentKwh, 'charging_cost' => $chargingCost,
             'total_cost' => $pricing->newRentalTotal($rentCost, $chargingCost), 'payment_proof_path' => self::PROOF,
         ]);
     }
